@@ -1,0 +1,46 @@
+# bart_large.yaml
+# BART-large — bf16; full FT or LoRA (use_lora) depending on VRAM
+
+model_name: "facebook/bart-large"
+use_lora: false          # set true for RTX 3060 12GB
+lora_r: 16
+lora_alpha: 32
+lora_target_modules: ["q_proj", "v_proj", "k_proj", "out_proj",
+                       "encoder_attn.q_proj", "encoder_attn.v_proj"]
+
+# Data
+train_file: "data/processed/train.jsonl"
+val_file: "data/processed/val.jsonl"
+max_input_length: 256
+max_target_length: 256
+prefix: "humanize: "
+
+# Training — tighter batch for larger model
+num_train_epochs: 5
+per_device_train_batch_size: 2
+per_device_eval_batch_size: 2
+gradient_accumulation_steps: 8     # effective batch = 16
+learning_rate: 5.0e-5
+lr_scheduler_type: "cosine"
+warmup_ratio: 0.1
+fp16: false
+bf16: true
+weight_decay: 0.01
+max_grad_norm: 1.0
+seed: 42
+
+# Evaluation
+evaluation_strategy: "epoch"
+save_strategy: "epoch"
+load_best_model_at_end: true
+metric_for_best_model: "eval_loss"
+predict_with_generate: true
+
+# Generation (must match Mistral for fair comparison)
+num_beams: 4
+max_new_tokens: 128
+
+# Output
+output_dir: "results/bart_large"
+logging_steps: 50
+report_to: "none"

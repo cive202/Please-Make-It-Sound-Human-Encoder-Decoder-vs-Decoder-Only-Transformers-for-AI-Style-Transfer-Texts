@@ -1,5 +1,5 @@
 # Optional: Unsloth for faster Mistral 4-bit training only.
-# Ignored when mistral_qlora.yaml uses load_in_8bit: true (default for 12GB quality).
+# Ignored when configs/mistral_qlora.yaml uses load_in_8bit: true (default for 12GB quality).
 #
 #   pip install -r requirements-optional.txt
 

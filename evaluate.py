@@ -327,7 +327,7 @@ def main():
     parser.add_argument("--bart_base_ckpt", default=None)
     parser.add_argument("--bart_large_ckpt", default=None)
     parser.add_argument("--mistral_ckpt", default=None)
-    parser.add_argument("--mistral_config", default="mistral_qlora.yaml",
+    parser.add_argument("--mistral_config", default="configs/mistral_qlora.yaml",
                         help="YAML with instruction_template for Mistral inference")
     parser.add_argument(
         "--mistral_fp16_base",

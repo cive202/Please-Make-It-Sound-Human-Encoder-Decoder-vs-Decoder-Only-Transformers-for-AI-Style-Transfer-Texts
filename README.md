@@ -2,7 +2,7 @@
 
 Replication and extension of the paper *From Machine to Human* — **BART** (encoder–decoder) and **Mistral 7B** (decoder-only, LoRA on quantized weights), with BERTScore, linguistic markers, and readability metrics.
 
-**Run all commands from the repository root** (where `prepare_data.py` and the YAML configs live).
+**Run all commands from the repository root**.
 
 ---
 
@@ -10,17 +10,16 @@ Replication and extension of the paper *From Machine to Human* — **BART** (enc
 
 ```
 BARTvsMistral/
-├── combined_success_all_models.jsonl   # optional: your raw pairs (or put under data/raw/)
-├── data/processed/                     # train.jsonl, val.jsonl, test.jsonl from prepare_data.py
-├── prepare_data.py
+├── data/processed/                     # provide train.jsonl, val.jsonl, test.jsonl (not committed)
 ├── train_bart.py
 ├── train_mistral_qlora.py
 ├── evaluate.py
 ├── qualitative_examples.py
 ├── linguistic_markers.py
-├── bart_base.yaml
-├── bart_large.yaml
-├── mistral_qlora.yaml
+├── configs/
+│   ├── bart_base.yaml
+│   ├── bart_large.yaml
+│   └── mistral_qlora.yaml
 ├── test_label_mask.py
 ├── requirements.txt
 ├── requirements-torch-gpu.txt          # CUDA PyTorch (install first on GPU machines)
@@ -65,7 +64,7 @@ BARTvsMistral/
    python -c "import torch; print('cuda:', torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else '')"
    ```
 
-6. **NLTK** (first run of `prepare_data.py` can auto-download `punkt` / `punkt_tab`).
+6. **NLTK**: some scripts may auto-download tokenizers (e.g., `punkt` / `punkt_tab`) on first run.
 
 Optional: `export HF_HOME=/path/to/large/disk` for model cache.
 
@@ -81,7 +80,7 @@ Optional: `export HF_HOME=/path/to/large/disk` for model cache.
 | **Mistral 7B** | **8-bit weights + LoRA** | Full fp16 7B weights need ~14GB+ and typically **OOM on 12GB**. |
 | **Mistral trainer** | `fp16: true` in YAML | Activations/optimizer; base stays 8-bit via bitsandbytes. |
 
-To use **4-bit NF4 + Unsloth** (faster, lower VRAM): in `mistral_qlora.yaml` set `load_in_4bit: true`, `load_in_8bit: false`, then `pip install -r requirements-optional.txt`.
+To use **4-bit NF4 + Unsloth** (faster, lower VRAM): in `configs/mistral_qlora.yaml` set `load_in_4bit: true`, `load_in_8bit: false`, then `pip install -r requirements-optional.txt`.
 
 For **evaluation / qualitative** on a **24GB+** GPU, you can load the Mistral base in fp16: pass `--mistral_fp16_base`.
 
@@ -90,26 +89,22 @@ For **evaluation / qualitative** on a **24GB+** GPU, you can load the Mistral ba
 ## Quick start
 
 ```bash
-# 1) Data (paths relative to repo root)
-python prepare_data.py --input combined_success_all_models.jsonl \
-  --output_dir data/processed --chunk_size 200 --seed 42
+# 1) BART-base (smoke)
+python train_bart.py --config configs/bart_base.yaml --smoke
 
-# 2) BART-base (smoke)
-python train_bart.py --config bart_base.yaml --smoke
+# 2) BART-base (full)
+python train_bart.py --config configs/bart_base.yaml
 
-# 3) BART-base (full)
-python train_bart.py --config bart_base.yaml
+# 3) BART-large (use LoRA on 12GB if OOM: use_lora: true in configs/bart_large.yaml)
+python train_bart.py --config configs/bart_large.yaml
 
-# 4) BART-large (use LoRA on 12GB if OOM: use_lora: true in bart_large.yaml)
-python train_bart.py --config bart_large.yaml
+# 4) Mistral 7B (smoke)
+python train_mistral_qlora.py --config configs/mistral_qlora.yaml --smoke
 
-# 5) Mistral 7B (smoke)
-python train_mistral_qlora.py --config mistral_qlora.yaml --smoke
+# 5) Mistral 7B (full; saves checkpoint-final/)
+python train_mistral_qlora.py --config configs/mistral_qlora.yaml
 
-# 6) Mistral 7B (full; saves checkpoint-final/)
-python train_mistral_qlora.py --config mistral_qlora.yaml
-
-# 7) Evaluate (checkpoint names match train_bart output: checkpoint-best)
+# 6) Evaluate (checkpoint names match train_bart output: checkpoint-best)
 python evaluate.py \
   --test_data data/processed/test.jsonl \
   --bart_base_ckpt results/bart_base/checkpoint-best \
@@ -117,7 +112,7 @@ python evaluate.py \
   --mistral_ckpt results/mistral_7b/checkpoint-final \
   --output_dir results/
 
-# 8) Qualitative table
+# 7) Qualitative table
 python qualitative_examples.py \
   --test_data data/processed/test.jsonl \
   --bart_base_ckpt results/bart_base/checkpoint-best \
@@ -135,7 +130,7 @@ python test_label_mask.py
 
 ## Optional: Unsloth
 
-Only used when `mistral_qlora.yaml` has **4-bit** enabled and **8-bit** disabled.
+Only used when `configs/mistral_qlora.yaml` has **4-bit** enabled and **8-bit** disabled.
 
 ```bash
 pip install -r requirements-optional.txt
@@ -162,7 +157,7 @@ BERTScore (P/R/F1), ROUGE-L, chrF++, GPT-2 perplexity, 11 linguistic marker shif
 
 ## Paper alignment
 
-- Data chunking / splits: `prepare_data.py`
+- Data: provide `data/processed/{train,val,test}.jsonl`
 - BART seq2seq: `train_bart.py`
 - Decoder-only LoRA: `train_mistral_qlora.py`
 - Metrics: `evaluate.py` + `linguistic_markers.py`

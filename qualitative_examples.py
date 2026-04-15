@@ -40,7 +40,7 @@ def main():
     parser.add_argument("--bart_base_ckpt", default=None)
     parser.add_argument("--bart_large_ckpt", default=None)
     parser.add_argument("--mistral_ckpt", default=None)
-    parser.add_argument("--mistral_config", default="mistral_qlora.yaml")
+    parser.add_argument("--mistral_config", default="configs/mistral_qlora.yaml")
     parser.add_argument(
         "--mistral_fp16_base",
         action="store_true",
