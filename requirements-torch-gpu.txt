@@ -1,0 +1,10 @@
+# CUDA 12.4 wheels (RTX 3060 / Ampere). Install BEFORE requirements.txt:
+#
+#   pip install -r requirements-torch-gpu.txt
+#
+# Pick a version that matches your NVIDIA driver from https://pytorch.org/get-started/locally/
+# If you need cu121 instead, replace cu124 with cu121 in both URLs below.
+
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch>=2.1.0
+torchvision>=0.16.0c

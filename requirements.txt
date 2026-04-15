@@ -1,0 +1,33 @@
+# Install CUDA-enabled PyTorch FIRST (see requirements-torch-gpu.txt), then:
+#   pip install -r requirements.txt
+#
+# Core ML (torch excluded — use requirements-torch-gpu.txt on GPU machines)
+transformers>=4.40.0
+datasets>=2.18.0
+accelerate>=0.27.0
+peft>=0.10.0
+trl>=0.8.0
+huggingface_hub>=0.20.0
+
+# Quantization (Mistral 8-bit / optional 4-bit LoRA)
+bitsandbytes>=0.41.0
+
+# Evaluation
+bert-score>=0.3.13
+rouge-score>=0.1.2
+sacrebleu>=2.3.1
+textstat>=0.7.3
+
+# NLP / data prep
+nltk>=3.8.1
+numpy>=1.24.0
+
+# Figures (generate_figures.py)
+matplotlib>=3.5.0
+
+# Config & utilities
+pyyaml>=6.0.1
+tqdm>=4.66.0
+
+# Optional experiment tracking
+# wandb>=0.16.0

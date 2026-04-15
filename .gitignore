@@ -1,0 +1,101 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Testing / coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & temp
+*.log
+*.tmp
+*.temp
+*.bak
+*.bak_*
+
+# ML experiment tracking
+wandb/
+mlruns/
+lightning_logs/
+tensorboard/
+
+# Training outputs (large checkpoints — keep configs/README; use Git LFS if you must track weights)
+results/
+checkpoints/
+checkpoint-*/
+checkpoint_*/
+**/checkpoint-*/
+**/adapter_model.safetensors
+**/model.safetensors
+**/pytorch_model.bin
+**/optimizer.pt
+**/scheduler.pt
+**/rng_state.pth
+**/trainer_state.json
+
+# Legacy/local outputs in repo root
+Bart_base/
+Bart_large/
+Mistral/
+
+# Local datasets (keep out of git; document how to build/download)
+ai_data_15k_converted.jsonl
+combined_success_all_models.jsonl
+
+# Hugging Face & PyTorch cache (downloaded models/datasets)
+.cache/
+huggingface/
+~/.cache/huggingface/
+
+# Optional: large generated data (remove leading # to ignore)
+# data/raw/
+# data/processed/
+
+# Local evaluation outputs (keep out of git)
+summary.json
+prediction_*.jsonl
+prediction_*.txt
+combined_success_all_models.jsonl.bak_*
+
+# Optional: regenerated figures (keep commented if you commit PDFs for the paper)
+# fig1_metrics.pdf
+# fig2_shifts.pdf
+# fig3_ppl.pdf
