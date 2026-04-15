@@ -9,7 +9,14 @@
 ![Metrics](https://img.shields.io/badge/Metrics-BERTScore%20%7C%20ROUGE--L%20%7C%20chrF++-orange?style=for-the-badge)  
 
 </p>
+<br>
 
+**Paper:** [Please Make It Sound Human: Encoder-Decoder vs Decoder-Only Transformers for AI Style Transfer Texts](https://arxiv.org/abs/2604.11687)
+
+## Model Links
+- **Mistral 7B LoRA:** https://huggingface.co/cive202/humanize-ai-text-mistral-7b-lora
+- **BART Base:** https://huggingface.co/cive202/humanize-ai-text-bart-base
+- **BART Large:** https://huggingface.co/cive202/humanize-ai-text-bart-large
 ---
 
 ## 🧠 Overview
@@ -17,8 +24,6 @@
 This project investigates a fundamental but underexplored question:
 
 > **Can AI-generated text be systematically rewritten to sound genuinely human?**
-
-We replicate and extend the findings of *From Machine to Human*, comparing:
 
 - **BART (Encoder–Decoder)** — reconstruction-based generation  
 - **Mistral 7B (Decoder-Only, QLoRA)** — large-scale autoregressive model  
@@ -121,11 +126,6 @@ BARTvsMistral/
 
 ---
 
-## 🤖 Model Release
-
-👉 https://huggingface.co/cive202/humanize-ai-text-mistral-7b-lora
-
----
 
 ## 📌 Research Takeaways
 
