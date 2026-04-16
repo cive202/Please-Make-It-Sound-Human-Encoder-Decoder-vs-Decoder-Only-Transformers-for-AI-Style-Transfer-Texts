@@ -1,154 +1,169 @@
-# ✨ Please Make It Sound Human  
-### *Encoder–Decoder vs. Decoder-Only Transformers for AI → Human Text Style Transfer*
+# Please Make It Sound Human: Encoder-Decoder vs. Decoder-Only Transformers for AI-to-Human Text Style Transfer
 
 <p align="center">
-
-![Paper](https://img.shields.io/badge/Paper-arXiv-red?style=for-the-badge)  
-![Model](https://img.shields.io/badge/Model-BART%20%7C%20Mistral-blueviolet?style=for-the-badge)  
-![Task](https://img.shields.io/badge/Task-Text%20Style%20Transfer-success?style=for-the-badge)  
-![Metrics](https://img.shields.io/badge/Metrics-BERTScore%20%7C%20ROUGE--L%20%7C%20chrF++-orange?style=for-the-badge)  
-
+  <a href="https://arxiv.org/abs/2604.11687"><img src="https://img.shields.io/badge/arXiv-2604.11687-b31b1b.svg" alt="arXiv"></a>
+  <a href="https://huggingface.co/cive202/humanize-ai-text-bart-large"><img src="https://img.shields.io/badge/🤗-BART Large-yellow" alt="BART Large"></a>
+  <a href="https://huggingface.co/cive202/humanize-ai-text-bart-base"><img src="https://img.shields.io/badge/🤗-BART Base-yellow" alt="BART Base"></a>
+  <a href="https://huggingface.co/cive202/humanize-ai-text-mistral-7b-lora"><img src="https://img.shields.io/badge/🤗-Mistral 7B LoRA-yellow" alt="Mistral LoRA"></a>
+  <img src="https://img.shields.io/badge/Python-3.10%2B-blue" alt="Python 3.10+">
 </p>
-<br>
 
-**Paper:** [Please Make It Sound Human: Encoder-Decoder vs Decoder-Only Transformers for AI Style Transfer Texts](https://arxiv.org/abs/2604.11687)
-
-## Model Links
-- **Mistral 7B LoRA:** https://huggingface.co/cive202/humanize-ai-text-mistral-7b-lora
-- **BART Base:** https://huggingface.co/cive202/humanize-ai-text-bart-base
-- **BART Large:** https://huggingface.co/cive202/humanize-ai-text-bart-large
----
-
-## 🧠 Overview
-
-This project investigates a fundamental but underexplored question:
-
-> **Can AI-generated text be systematically rewritten to sound genuinely human?**
-
-- **BART (Encoder–Decoder)** — reconstruction-based generation  
-- **Mistral 7B (Decoder-Only, QLoRA)** — large-scale autoregressive model  
+> Can AI-generated text be systematically rewritten to sound genuinely human? This repository benchmarks BART (encoder-decoder, full fine-tune) against Mistral 7B (decoder-only, QLoRA) on that exact question — with a 25,140-pair dataset and an evaluation framework spanning semantic, lexical, fluency, and 11 linguistic marker dimensions.
 
 ---
 
-## 🚀 Key Contributions
+## Overview
 
-- 📊 **25,140 paired dataset** of AI-generated and human-authored text  
-- 🔍 **11 linguistic markers** defining “human-like” writing  
-- ⚖️ Introduction of **marker shift accuracy vs. magnitude**  
-- 🏆 Demonstration that **BART-large outperforms Mistral-7B (17× smaller)**  
-- 🧩 Insight: **pretraining objective > parameter scale** for style transfer  
+| Model | Architecture | Training Strategy |
+|---|---|---|
+| `bart-base` | Encoder-decoder | Full fine-tune |
+| `bart-large` | Encoder-decoder | Full fine-tune |
+| `mistral-7b-instruct` | Decoder-only | QLoRA (4-bit / 8-bit) |
 
----
-
-## 🏗️ Architecture Comparison
-
-| Model Type | Example | Strength |
-|-----------|--------|----------|
-| Encoder–Decoder | BART | Precise reconstruction & controlled rewriting |
-| Decoder-Only | Mistral 7B | Strong generation, but prone to stylistic overshoot |
+**Headline finding:** BART-large outperforms Mistral 7B despite being 17× smaller. Pretraining objective matters more than parameter scale for constrained style transfer.
 
 ---
 
-## 📊 Core Findings
+## Resources
 
-### 🥇 Reference Similarity (Best Model: BART-large)
+| Resource | Link |
+|---|---|
+| Paper | [arxiv.org/abs/2604.11687](https://arxiv.org/abs/2604.11687) |
+| BART Large checkpoint | [cive202/humanize-ai-text-bart-large](https://huggingface.co/cive202/humanize-ai-text-bart-large) |
+| BART Base checkpoint | [cive202/humanize-ai-text-bart-base](https://huggingface.co/cive202/humanize-ai-text-bart-base) |
+| Mistral 7B LoRA adapter | [cive202/humanize-ai-text-mistral-7b-lora](https://huggingface.co/cive202/humanize-ai-text-mistral-7b-lora) |
+
+---
+
+## Key Contributions
+
+- **25,140-pair dataset** of AI-generated and human-authored text across academic, technical, and creative domains
+- **11 linguistic markers** operationalising what "human-like" writing actually means
+- Introduction of **marker shift accuracy vs. magnitude** as a more faithful evaluation axis
+- Evidence that **encoder-decoder architectures outperform decoder-only** for controlled rewriting tasks
+
+---
+
+## Results
+
+### Reference similarity — best model: BART-large
 
 | Metric | Score |
-|------|------|
-| **BERTScore F1** | **0.924** |
-| **ROUGE-L** | **0.566** |
-| **chrF++** | **55.92** |
+|---|---|
+| BERTScore F1 | 0.924 |
+| ROUGE-L | 0.566 |
+| chrF++ | 55.92 |
 
----
-
-### ⚠️ The Overshoot Problem
-
-Mistral-7B shows:
-
-- ❌ Excessive contractions  
-- ❌ Too many words & sentences  
-- ❌ Wrong punctuation trends  
-- ❌ Over-simplified, overly predictable text  
-
-> High “shift” ≠ human-like  
-> **Accuracy matters more than magnitude**
-
----
-
-### 📉 Fluency vs Authenticity
+### Fluency vs. authenticity
 
 | Model | GPT-2 Perplexity |
-|------|----------------|
-| Human | 23.69 |
+|---|---|
+| Human reference | 23.69 |
 | BART-large | ~27 |
-| Mistral-7B | **9.03** |
+| Mistral 7B | 9.03 |
+
+Mistral's near-perfect perplexity is a red flag, not a success signal. Unnaturally low perplexity indicates over-smoothed, predictable text — the opposite of authentic human writing.
+
+### The overshoot problem
+
+Mistral 7B consistently over-corrects: too many contractions, inflated word and sentence counts, wrong punctuation trends, and excessive simplification. High marker *shift* does not mean human-like; *accuracy* of shift direction is what matters.
 
 ---
 
-## 🧪 Evaluation Framework
+## Evaluation Framework
 
-We evaluate across **5 dimensions**:
+Five complementary dimensions:
 
-- 🧠 **BERTScore** → semantic preservation  
-- 🔤 **ROUGE-L / chrF++** → lexical similarity  
-- 📉 **Perplexity** → fluency vs naturalness  
-- 📚 **Vocabulary Jaccard** → lexical overlap  
-- 🧬 **Linguistic Marker Shift (11 features)** → stylistic realism  
-
----
-
-## 🧩 Methodology Highlights
-
-### Data
-- Multi-domain corpus (academic, technical, creative)
-- AI text generated using LLaMA-family models
-- Sentence-aware chunking (~200 tokens)
-
-### Models
-- **BART-base / BART-large** → full fine-tuning  
-- **Mistral 7B** → QLoRA (4-bit/8-bit)  
+| Dimension | Metric(s) | What it captures |
+|---|---|---|
+| Semantic preservation | BERTScore F1 | Meaning retained after rewrite |
+| Lexical similarity | ROUGE-L, chrF++ | Surface-level overlap with human reference |
+| Fluency | GPT-2 perplexity | Naturalness of generated text |
+| Vocabulary overlap | Jaccard similarity | Lexical diversity alignment |
+| Stylistic realism | 11 linguistic marker shifts | Genuine human-writing behaviour |
 
 ---
 
-## 📁 Repository Structure
+## Quickstart
+
+**Requirements:** Python 3.10+, PyTorch with CUDA, Hugging Face account with access to `mistralai/Mistral-7B-Instruct-v0.2`. A fresh virtual environment is recommended.
+
+### 1. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Prepare data
+
+Place `train.jsonl`, `val.jsonl`, and `test.jsonl` into `data/processed/`.
+
+### 3. Train
+
+```bash
+# BART (base or large — set model name in configs/default.yaml)
+python train_bart.py
+
+# Mistral 7B QLoRA
+python train_mistral_qlora.py
+```
+
+### 4. Evaluate
+
+```bash
+python evaluate.py --model-type bart --checkpoint outputs/bart-large-humanize
+python evaluate.py --model-type mistral --checkpoint outputs/mistral-7b-lora-humanize
+```
+
+### 5. Inspect linguistic markers
+
+```bash
+python linguistic_markers.py --predictions outputs/bart-large-humanize/predictions.jsonl
+```
+
+### 6. Export qualitative examples
+
+```bash
+python qualitative_examples.py --checkpoint outputs/bart-large-humanize
+```
+
+---
+
+## Repository Layout
 
 ```
 BARTvsMistral/
+├── configs/
+│   └── default.yaml               # Paths and hyperparameters
+├── data/
+│   └── processed/                 # train/val/test.jsonl (not committed)
+├── results/                       # Evaluation outputs
 ├── train_bart.py
 ├── train_mistral_qlora.py
 ├── evaluate.py
 ├── linguistic_markers.py
 ├── qualitative_examples.py
-├── configs/
-├── data/processed/
-└── results/
+└── requirements.txt
 ```
 
 ---
 
-
-## 📌 Research Takeaways
-
-- 🔹 Bigger models ≠ better style transfer  
-- 🔹 Encoder–decoder > decoder-only for constrained rewriting  
-- 🔹 Evaluation must consider **accuracy, not just change magnitude**  
-- 🔹 Human writing = **controlled variability, not smooth perfection**  
-
----
-
-## 📖 Citation
+## Citation
 
 ```bibtex
 @article{paneru2026humanize,
-  title={Please Make It Sound like Human: Encoder-Decoder vs Decoder-Only Transformers for AI-to-Human Text Style Transfer},
-  author={Paneru, Utsav},
-  year={2026},
-  journal={arXiv}
+  title   = {Please Make It Sound like Human: Encoder-Decoder vs Decoder-Only Transformers for AI-to-Human Text Style Transfer},
+  author  = {Paneru, Utsav},
+  journal = {arXiv preprint arXiv:2604.11687},
+  year    = {2026}
 }
 ```
 
 ---
 
-## 🌟 Final Note
-
-> ✨ *Human-like writing is not about sounding perfect — it’s about sounding real.*
+<p align="center">
+  <a href="https://arxiv.org/abs/2604.11687">Paper</a> ·
+  <a href="https://huggingface.co/cive202/humanize-ai-text-bart-large">BART Large</a> ·
+  <a href="https://huggingface.co/cive202/humanize-ai-text-bart-base">BART Base</a> ·
+  <a href="https://huggingface.co/cive202/humanize-ai-text-mistral-7b-lora">Mistral 7B LoRA</a>
+</p>
